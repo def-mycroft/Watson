@@ -23,6 +23,7 @@ from .frames import Frame
 from .utils import (
     apply_weekday_offset,
     build_csv,
+    get_most_recent_sunday,
     confirm_project,
     confirm_tags,
     create_watson,
@@ -445,10 +446,10 @@ _SHORTCUT_OPTIONS_VALUES = {
 @click.option('-c/-C', '--current/--no-current', 'current', default=None,
               help="(Don't) include currently running frame in report.")
 @click.option('-f', '--from', 'from_', cls=MutuallyExclusiveOption,
-              type=DateTime, default=arrow.now().shift(days=-7),
+              type=DateTime, default=get_most_recent_sunday(),
               mutually_exclusive=_SHORTCUT_OPTIONS,
               help="The date from when the report should start. Defaults "
-              "to seven days ago.")
+              "to most recent Sunday (excl. today).")
 @click.option('-t', '--to', cls=MutuallyExclusiveOption, type=DateTime,
               default=arrow.now(),
               mutually_exclusive=_SHORTCUT_OPTIONS,

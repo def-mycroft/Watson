@@ -10,11 +10,26 @@ import tempfile
 from io import StringIO
 import click
 import arrow
+import pandas as pd
 
 import watson as _watson
 from .fullmoon import get_last_full_moon
 
 from click.exceptions import UsageError
+
+
+def get_most_recent_sunday():
+    """Return date of most recent Sunday (not including current day)"""
+    end = pd.Timestamp.now()
+    start = end - pd.Timedelta(days=7)
+    sun = [d for d in list(pd.date_range(start, end, freq='D')) 
+           if d.strftime('%a') == 'Sun'][0]
+
+    # convert to arrow
+    sun = arrow.arrow.Arrow(sun.year, sun.month, sun.day, 0, 0, 
+                            tzinfo='US/Central')
+
+    return sun
 
 
 def create_watson():
